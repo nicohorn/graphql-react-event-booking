@@ -39,16 +39,10 @@ app.use('/graphql',
         `),
         rootValue: {
             events: () => {
-                return;
+                //this find method is provided by mongoose. if we execute the method with no filters, it'll retrieve all the Event objects it finds.
+                Event.find()
             },
             createEvent: (args) => {
-                // const event = {
-                //     _id: Math.random().toString(),
-                //     title: args.eventInput.title,
-                //     description: args.eventInput.description,
-                //     price: args.eventInput.price,
-                //     date: args.eventInput.date
-                // }
 
                 const event = new Event({
                     title: args.eventInput.title,
@@ -57,7 +51,8 @@ app.use('/graphql',
                     date: new Date(args.eventInput.date)
                 })
 
-                event.save().then(result => {
+                //due to the GraphQL configuration, this function/method must return an object
+                return event.save().then(result => {
                     console.log(result)
                     return {...result._doc }
                     //_doc is a property provided by mongoose which give all the core properties that make the object and leave out all the metadata
@@ -66,8 +61,7 @@ app.use('/graphql',
                     throw err;
                 });
 
-                //due to the GraphQL configuration, this function/method must return an object
-                return event;
+
             }
         },
         graphiql: true

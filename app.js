@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const app = express();
 const Event = require('./models/event');
 const User = require('./models/user')
+const bcrypt = require('bcryptjs')
 const { events } = require('./models/event');
 
 app.use(bodyParser.json());
@@ -70,25 +71,58 @@ app.use('/graphql',
                     title: args.eventInput.title,
                     description: args.eventInput.description,
                     price: args.eventInput.price,
-                    date: new Date(args.eventInput.date)
+                    date: new Date(args.eventInput.date),
+                    creator: '6170674dcf8e191cd64a4c67'
                 })
-
+                let createdEvent;
                 //due to the GraphQL configuration, this function/method must return an object
                 return event.save().then(result => {
-                    console.log(result)
-                    return {...result._doc, _id: event._doc._id.toString() }
-                    //_doc is a property provided by mongoose which give all the core properties that make the object and leave out all the metadata
-                }).catch(err => {
-                    console.log(err)
-                    throw err;
-                });
+                        createdEvent = {...result._doc, _id: event._doc._id.toString() }
+                        return User.findById('6170674dcf8e191cd64a4c67')
+                        console.log(result)
+                    })
+                    .then(user => {
+                        if (!user) {
+                            throw new Error('User does not exists.')
+                        }
+                        user.createdEvents.push(event);
+                        //mongoose handles this event object that I'm passing as an argument.
+                        return user.save();
+                    })
+                    .then(result => {
+                        return createdEvent;
+                        //_doc is a property provided by mongoose which give all the core properties that make the object and leave out all the metadata
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        throw err;
+                    });
             },
 
             createUser: (args) => {
-                const user = new User({
-                    email: args.userInput.email,
-                    password: args.userInput.password
-                })
+                return User.findOne({ email: args.userInput.email })
+                    .then(user => {
+                        if (user) {
+                            throw new Error('User exists already.')
+                        }
+                        return bcrypt
+                            .hash(args.userInput.password, 12)
+                    })
+                    .then(hashedPassword => {
+                        const user = new User({
+                            email: args.userInput.email,
+                            password: hashedPassword
+                        })
+                        return user.save();
+                    })
+                    .then(result => {
+                        //the part id: result.id is a simplified version of what I did manually, it's also provided by mongoose :) and I'm also overriding the password to null everytime someone wants to retrieve it because even though it's hashed, it's still a security issue.
+                        return {...result._doc, password: null, id: result.id }
+                    })
+                    .catch(err => {
+                        throw err;
+                    })
+
             }
         },
         graphiql: true

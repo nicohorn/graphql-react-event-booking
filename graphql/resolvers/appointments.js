@@ -3,15 +3,30 @@ const { transformBooking, transformEvent, transformAppointment } = require('./me
 
 
 module.exports = {
-    appointments: async() => {
-        try {
-            const appointments = await Appointment.find()
-            return appointments.map(appointment => {
-                return transformAppointment(appointment);
-            })
-        } catch (err) {
-            throw err;
+    appointments: async(args, req) => {
+        if (!req.isAuth) {
+            throw new Error("Unauthenticated!")
         }
+        if (req.isAdmin) {
+            try {
+                const appointments = await Appointment.find()
+                return appointments.map(appointment => {
+                    return transformAppointment(appointment);
+                })
+            } catch (err) {
+                throw err;
+            }
+        } else {
+            try {
+                const appointments = await Appointment.find({ user: req.userId })
+                return appointments.map(appointment => {
+                    return transformAppointment(appointment)
+                })
+            } catch (err) {
+                throw err;
+            }
+        }
+
     },
 
     bookAppointment: async(args, req) => {

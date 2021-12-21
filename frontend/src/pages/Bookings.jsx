@@ -101,7 +101,7 @@ static contextType = AuthContext;
 
     render() {
       return (
-        <div className="container mx-auto px-8 mt-20">
+        <div className="container mx-auto px-8 mt-8">
           {this.state.isLoading ? (
             <Spinner />
           ) : (

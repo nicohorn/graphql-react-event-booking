@@ -25,6 +25,11 @@ type Professional{
     lastname: String!
     price: Float!
     image: String!
+    startTimeMorning: String!
+    endTimeMorning: String!
+    startTimeAfternoon: String!
+    endTimeAfternoon: String!
+
 }
 
 type Appointment{
@@ -77,6 +82,10 @@ input ProfessionalInput{
     lastname: String!
     price: Float!
     image: String!
+    startTimeMorning: String!
+    endTimeMorning: String!
+    startTimeAfternoon: String!
+    endTimeAfternoon: String!
 }
 
 input BookAppointmentInput{

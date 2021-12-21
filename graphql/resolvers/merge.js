@@ -119,7 +119,7 @@ const transformAppointment = appointment => {
     return {
         ...appointment._doc,
         _id: appointment.id,
-        user: user2.bind(this, appointment._doc.user),
+        user: user.bind(this, appointment._doc.user),
         professional: singleProfessional.bind(this, appointment._doc.professional),
         startDate: dateToString(appointment._doc.startDate),
         endDate: dateToString(appointment._doc.startDate),

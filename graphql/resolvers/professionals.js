@@ -24,7 +24,11 @@ module.exports = {
             name: args.professionalInput.name,
             lastname: args.professionalInput.lastname,
             price: +args.professionalInput.price,
-            image: args.professionalInput.image
+            image: args.professionalInput.image,
+            startTimeMorning: args.professionalInput.startTimeMorning,
+            endTimeMorning: args.professionalInput.endTimeMorning,
+            startTimeAfternoon: args.professionalInput.startTimeAfternoon,
+            endTimeAfternoon: args.professionalInput.endTimeAfternoon
 
         })
         let createdProfessional;

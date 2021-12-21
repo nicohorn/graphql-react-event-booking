@@ -17,6 +17,22 @@ const professionalSchema = new Schema({
         type: Number,
         required: true
     },
+    startTimeMorning: {
+        type: String,
+        required: true
+    },
+    endTimeMorning: {
+        type: String,
+        required: true
+    },
+    startTimeAfternoon: {
+        type: String,
+        required: true
+    },
+    endTimeAfternoon: {
+        type: String,
+        required: true
+    },
     image: {
         type: String,
         required: true

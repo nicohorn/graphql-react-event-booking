@@ -230,7 +230,7 @@ class EventsPage extends Component {
           >
             <form>
               <div className="form-control">
-                <label className="label text-black" htmlFor="title">
+                <label className="label" htmlFor="title">
                   Title
                 </label>
                 <input
@@ -241,7 +241,7 @@ class EventsPage extends Component {
                 />
               </div>
               <div className="form-control">
-                <label className="label text-black" htmlFor="price">
+                <label className="label" htmlFor="price">
                   Price
                 </label>
                 <input
@@ -252,7 +252,7 @@ class EventsPage extends Component {
                 />
               </div>
               <div className="form-control">
-                <label className="label text-black" htmlFor="date">
+                <label className="label" htmlFor="date">
                   Date
                 </label>
                 <input
@@ -263,7 +263,7 @@ class EventsPage extends Component {
                 />
               </div>
               <div className="form-control">
-                <label className="label text-black" htmlFor="description">
+                <label className="label" htmlFor="description">
                   Description
                 </label>
                 <textarea
@@ -282,23 +282,25 @@ class EventsPage extends Component {
               title={this.state.selectedEvent.title}
               canConfirm
               canCancel
+              cancelText = "Cancel"
               confirmText={this.context.token ? "Book" : "Confirm"}
               onCancel={this.modalCancelHandler}
               onConfirm={this.bookEventHandler}
             >
-              <h1 className="font-bold text-black">
+              <h1 className="font-bold">
                 {this.state.selectedEvent.title}
               </h1>
-              <h1 className="text-black">{this.state.selectedEvent.price}</h1>
-              <h1 className="text-black">
-                {new Date(this.state.selectedEvent.date).toLocaleDateString()}
-              </h1>
-              <h1 className="text-black">
+              <h1 >
                 {this.state.selectedEvent.description}
               </h1>
+              <h1 >$ {this.state.selectedEvent.price}</h1>
+              <h1 >
+                {new Date(this.state.selectedEvent.date).toLocaleDateString()} at {new Date(this.state.selectedEvent.date).toTimeString().slice(0,5)}
+              </h1>
+              
             </Modal>
           )}
-          {this.context.token && (
+          {this.context.isAdmin && (
             <div className="events-control">
               <button
                 className="btn mt-2 mb-4"

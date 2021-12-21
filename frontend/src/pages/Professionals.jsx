@@ -24,6 +24,10 @@ class ProfessionalsPage extends Component {
     this.lastnameElRef = React.createRef();
     this.priceElRef = React.createRef();
     this.startDateElRef = React.createRef();
+    this.startTimeMorningElRef = React.createRef();
+    this.endTimeMorningElRef = React.createRef();
+    this.startTimeAfternoonElRef = React.createRef();
+    this.endTimeAfternoonElRef = React.createRef();
 
   }
 
@@ -48,7 +52,12 @@ class ProfessionalsPage extends Component {
     const name = this.nameElRef.current.value;
     const lastname = this.lastnameElRef.current.value;
     const price = +this.priceElRef.current.value;
-    const image = this.state.selectedFile.name
+    const image = this.state.selectedFile.name;
+    const startTimeMorning = this.startTimeMorningElRef.current.value;
+    const endTimeMorning = this.endTimeMorningElRef.current.value;
+    const startTimeAfternoon = this.startTimeAfternoonElRef.current.value;
+    const endTimeAfternoon = this.endTimeAfternoonElRef.current.value;
+    
 
     const professional = { name: name, lastname: lastname, price: price, image: image };
 
@@ -74,7 +83,7 @@ class ProfessionalsPage extends Component {
             const requestBody = {
               query: `
                 mutation{
-                  createProfessional(professionalInput: {name: "${name}", lastname: "${lastname}", price: ${price}, image: "${res.data.imageUrl}"}){
+                  createProfessional(professionalInput: {name: "${name}", lastname: "${lastname}", price: ${price}, image: "${res.data.imageUrl}", startTimeMorning: "${startTimeMorning}", endTimeMorning:"${endTimeMorning}", startTimeAfternoon: "${startTimeAfternoon}", endTimeAfternoon: "${endTimeAfternoon}"}){
                     _id
                     name
                     lastname
@@ -98,7 +107,7 @@ class ProfessionalsPage extends Component {
                 }
                 return res.json();
               })
-              .then((resData) => {
+              .then(() => {
                 this.fetchProfessionals();
               })
               .catch((err) => {
@@ -220,7 +229,7 @@ class ProfessionalsPage extends Component {
               >
                 <form>
                   <div className="form-control">
-                    <label className="label " htmlFor="name">
+                    <label className="label" htmlFor="name">
                       Name
                     </label>
                     <input
@@ -248,6 +257,44 @@ class ProfessionalsPage extends Component {
                       ref={this.priceElRef}
                     />
 
+                    <label className="label" htmlFor="time">
+                      Start time morning
+                    </label>
+                    <input
+                      className="input input-bordered"
+                      type="time"
+                      id="startTimeMorning"
+                      ref={this.startTimeMorningElRef}
+                    />
+
+                    <label className="label" htmlFor="time">
+                    End time morning
+                    </label>
+                    <input
+                      className="input input-bordered"
+                      type="time"
+                      id="endTimeMorning"
+                      ref={this.endTimeMorningElRef}
+                    />
+                    <label className="label" htmlFor="time">
+                      Start time afternoon
+                    </label>
+                    <input
+                      className="input input-bordered"
+                      type="time"
+                      id="startTimeAfternoon"
+                      ref={this.startTimeAfternoonElRef}
+                    />
+                    <label className="label" htmlFor="time">
+                      End time afternoon
+                    </label>
+                    <input
+                      className="input input-bordered"
+                      type="time"
+                      id="endTimeAfternoon"
+                      ref={this.endTimeAfternoonElRef}
+                    />
+
                     <label
                       className="
                                 w-100
@@ -273,6 +320,7 @@ class ProfessionalsPage extends Component {
               <Modal
                 title={this.state.selectedProfessional.name}
                 canCancel
+                cancelText = "Cancel"
                 onCancel={this.modalCancelHandler}
               >
                 <h1 className="font-bold ">
@@ -290,6 +338,7 @@ class ProfessionalsPage extends Component {
                 title={this.state.selectedProfessional.name}
                 canConfirm
                 canCancel
+                cancelText = "Cancel"
                 confirmText="Book appointment"
                 onCancel={this.modalCancelHandler}
                 onConfirm={this.bookAppointmentHandler}

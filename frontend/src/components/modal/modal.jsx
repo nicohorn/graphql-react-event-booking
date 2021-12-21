@@ -14,7 +14,7 @@ const modal = props => {
         <div class="modal-action">
           {props.canCancel && (
             <button className="btn" onClick={props.onCancel}>
-              Cancel
+              {props.cancelText}
             </button>
           )}
           {props.canConfirm && (

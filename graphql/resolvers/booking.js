@@ -1,28 +1,49 @@
 const Event = require('../../models/event');
 const Booking = require('../../models/booking');
-const { transformBooking, transformEvent } = require('./merge')
+const Appointment = require('../../models/appointment');
+//const Professional = require('../../models/professional');
+
+const { transformBooking, transformEvent, transformAppointment } = require('./merge')
 
 
 module.exports = {
 
-    bookings: async() => {
-        try {
-            const bookings = await Booking.find()
-            return bookings.map(booking => {
-                return transformBooking(booking);
-            })
-        } catch (err) {
-            throw err;
+    bookings: async(args, req) => {
+        if (!req.isAuth) {
+            throw new Error("Unauthenticated!")
         }
+        if (req.isAdmin) {
+            try {
+                const bookings = await Booking.find()
+                return bookings.map(booking => {
+                    return transformBooking(booking);
+                })
+            } catch (err) {
+                throw err;
+            }
+        } else {
+            try {
+                const bookings = await Booking.find({ user: req.userId })
+                return bookings.map(booking => {
+                    return transformBooking(booking);
+                })
+            } catch (err) {
+                throw err;
+            }
+        }
+
     },
 
-    bookEvent: async args => {
-        const fetchedEvent = await Event.findOne({ _id: args.eventId })
+    bookEvent: async(args, req) => {
+        if (!req.isAuth) {
+            throw new Error('Unauthenticated!');
+        }
+        const fetchedEvent = await Event.findOne({ _id: args.eventId });
         const booking = new Booking({
-            user: '618ed877b0c964f3eee98dac',
+            user: req.userId,
             event: fetchedEvent
-        })
-        const result = await booking.save()
+        });
+        const result = await booking.save();
         return transformBooking(result);
     },
 

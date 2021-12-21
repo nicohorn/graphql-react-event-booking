@@ -11,6 +11,15 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    isAdmin: {
+        type: Boolean,
+        required: true
+    },
+
+    profile: {
+        type: Schema.Types.ObjectId,
+        ref: 'Profile'
+    },
 
     createdEvents: [{
         //ObjectId is an special datatype that mongoose/MongoDB uses for FK and stuff

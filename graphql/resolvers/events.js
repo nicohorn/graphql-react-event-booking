@@ -1,7 +1,10 @@
 const Event = require('../../models/event');
-const User = require('../../models/user')
+const User = require('../../models/user');
 
 const { transformEvent } = require('./merge')
+
+
+
 
 
 module.exports = {
@@ -19,14 +22,15 @@ module.exports = {
         }
     },
 
-    createEvent: async(args) => {
+
+    createEvent: async(args, req) => {
 
         const event = new Event({
             title: args.eventInput.title,
             description: args.eventInput.description,
-            price: args.eventInput.price,
+            price: +args.eventInput.price,
             date: new Date(args.eventInput.date),
-            creator: '618ed877b0c964f3eee98dac'
+            creator: req.userId
         })
         let createdEvent;
 
@@ -34,7 +38,7 @@ module.exports = {
             //due to the GraphQL configuration, this function/method must return an object
             const result = await event.save()
             createdEvent = transformEvent(result);
-            const creator = await User.findById('618ed877b0c964f3eee98dac')
+            const creator = await User.findById(req.userId)
 
 
             if (!creator) {
@@ -51,6 +55,6 @@ module.exports = {
             console.log(err)
             throw err;
         }
-    }
+    },
 
 }

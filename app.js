@@ -1,18 +1,18 @@
-//This is where I setup my node.js express server :)
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const graphqlHttp = require('express-graphql').graphqlHTTP;
 const mongoose = require('mongoose');
-const isAuth = require('./middleware/is_auth');
+const cors = require('cors')
+
+const graphQlSchema = require('./graphql/schema/index');
+const graphQlResolvers = require('./graphql/resolvers/index');
+const isAuth = require('./middleware/is-auth');
 
 const app = express();
-const graphQlSchema = require('./graphql/schema/index.js');
-const graphQlResolvers = require('./graphql/resolvers/index.js');
-
-
 
 app.use(bodyParser.json());
+
+app.use(cors());
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -22,20 +22,26 @@ app.use((req, res, next) => {
         return res.sendStatus(200);
     }
     next();
-})
+});
 
 app.use(isAuth);
 
-app.use('/graphql',
+app.use(
+    '/graphql',
     graphqlHttp({
         schema: graphQlSchema,
         rootValue: graphQlResolvers,
         graphiql: true
-    }))
+    })
+);
 
-mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.bdyfh.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`)
+mongoose
+    .connect(
+        `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.bdyfh.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`
+    )
     .then(() => {
         app.listen(3000);
-    }).catch(err => {
-        console.log(err);
     })
+    .catch(err => {
+        console.log(err);
+    });

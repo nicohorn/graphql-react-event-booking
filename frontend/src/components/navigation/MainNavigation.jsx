@@ -37,6 +37,12 @@ const mainNavigation = (props) => (
                 >
                   Events
                 </NavLink>
+                <NavLink
+                  className="btn btn-ghost btn-sm rounded-btn"
+                  to="/calendar"
+                >
+                  Calendar
+                </NavLink>
               </div>
             </div>
           )}

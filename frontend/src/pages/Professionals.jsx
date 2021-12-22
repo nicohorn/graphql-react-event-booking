@@ -136,6 +136,10 @@ class ProfessionalsPage extends Component {
             lastname
             price
             image
+            startTimeMorning
+            endTimeMorning
+            startTimeAfternoon
+            endTimeAfternoon
           }
         }
       `
@@ -223,6 +227,7 @@ class ProfessionalsPage extends Component {
                 title="Add professional"
                 canCancel
                 canConfirm
+                cancelText = "Cancel"
                 confirmText="Confirm"
                 onCancel={this.modalCancelHandler}
                 onConfirm={this.modalConfirmHandler}
@@ -320,16 +325,19 @@ class ProfessionalsPage extends Component {
               <Modal
                 title={this.state.selectedProfessional.name}
                 canCancel
-                cancelText = "Cancel"
+                cancelText = "Return"
                 onCancel={this.modalCancelHandler}
               >
-                <h1 className="font-bold ">
+                <h1 className="font-bold text-xl mb-3">
                   {this.state.selectedProfessional.name}{" "}
                   {this.state.selectedProfessional.lastname}
                 </h1>
-                <h1 className="font-bold ">
-                  ${this.state.selectedProfessional.price}
+                <p>Mornings from {this.state.selectedProfessional.startTimeMorning} to {this.state.selectedProfessional.endTimeMorning}</p>
+                <p>Afternoons from {this.state.selectedProfessional.startTimeAfternoon} to {this.state.selectedProfessional.endTimeAfternoon}</p>
+                <h1 className='mt-2'>
+                  Hourly rate: <span className="font-bold ">${this.state.selectedProfessional.price}</span> 
                 </h1>
+                <h1>Specialized in family therapy</h1>
               </Modal>
             )}
 
@@ -346,9 +354,10 @@ class ProfessionalsPage extends Component {
                 <h1 className="font-bold ">
                   {this.state.selectedProfessional.name}{" "}
                   {this.state.selectedProfessional.lastname}
+                  
                 </h1>
-                <h1 className="font-bold ">
-                  ${this.state.selectedProfessional.price}
+                <h1 > Price: <span className="font-bold ">${this.state.selectedProfessional.price}</span>
+                  
                 </h1>
                 <label className="label " htmlFor="price">
                   Date and time of the appointment

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AuthContext from '../context/auth-context'
+import axios from 'axios';
 
 class AuthPage extends Component {
     state = {
@@ -36,7 +37,7 @@ class AuthPage extends Component {
         const email = this.emailEl.current.value;
         const password = this.passwordEl.current.value; 
         let password2;
-        //let image;
+
         let profileName;
         let profileLastName;
         let dni;
@@ -51,6 +52,7 @@ class AuthPage extends Component {
            profileLastName = this.lastNameEl.current.value;
            dni = this.dniEl.current.value;
            birthday = this.birthdayEl.current.value
+
         }
 
         if(password === password2){
@@ -75,6 +77,7 @@ class AuthPage extends Component {
                         profile{
                           name
                           lastname
+                          image
                         }
                     }
                 }
@@ -108,7 +111,8 @@ class AuthPage extends Component {
                     resData.data.login.isAdmin,
                     resData.data.login.tokenExpiration,
                     resData.data.login.profile.name,
-                    resData.data.login.profile.lastname
+                    resData.data.login.profile.lastname,
+                    resData.data.login.profile.image
                     
                   );
                   
@@ -164,31 +168,43 @@ class AuthPage extends Component {
                 console.log("resData createUser", resData)
                 userId = resData.data.createUser._id
                 console.log("ID DE USUARIO CREADO", resData.data.createUser._id)
-                let requestBody2 = {
-                  query: `
-                      mutation{
-                          createProfile(profileInput: {name: "${profileName}", lastname: "${profileLastName}", dni: ${dni}, birthday: "${birthday}", userId: "${userId}"}){
-                              _id
-                              name
-                              lastname
-                              user{
-                                email
-                              }
-                          }
-                      }
-                  `
-              };
-      
-                fetch("http://localhost:3000/graphql", {
-                method: "POST",
-                body: JSON.stringify(requestBody2),
-                headers: {
-                  "Content-Type": "application/json",
-                },
+                const fd = new FormData();
+                fd.append("image", this.state.selectedFile, this.state.selectedFile.name);
+                console.log(fd);
+                axios
+                  .post(
+                    "https://us-central1-origen-967ef.cloudfunctions.net/uploadFile",
+                    fd
+                  ).then(res => {let requestBody2 = {
+                    query: `
+                        mutation{
+                            createProfile(profileInput: {name: "${profileName}", lastname: "${profileLastName}", dni: ${dni}, birthday: "${birthday}", userId: "${userId}", image: "${res.data.imageUrl}"}){
+                                _id
+                                name
+                                lastname
+                                user{
+                                  email
+                                }
+                            }
+                        }
+                    `
+                };
+        
+                  fetch("http://localhost:3000/graphql", {
+                  method: "POST",
+                  body: JSON.stringify(requestBody2),
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                })
+                this.setState(prevState => {
+                  return {isLogin: !prevState.isLogin}
               })
-                return(console.log("User created"))     
- 
-          })
+                  return(console.log("User created"))     
+                  
+   
+            })})
+                
           .catch((err) => {
             console.log(err);
           });

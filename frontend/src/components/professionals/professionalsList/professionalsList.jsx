@@ -15,6 +15,7 @@ const professionalList = (props) => {
               userId={props.authUserId}
               onDetail={props.onViewDetail}
               bookAppointment={props.bookAppointment}
+
             />
 
         );

@@ -9,7 +9,11 @@ const bookingsItem = props =>{
       >
         <div className="card-body">
           <li>
-            {props.eventTitle} - {props.createdAt}
+            <span className='font-extrabold'>{props.eventTitle}</span> 
+            <br></br>
+            <p>Speaker: {props.speakerName} {props.speakerLastName}</p>
+            <br></br>
+            {props.createdAt}
           </li>
           <div className="justify-end card-actions">
             <button

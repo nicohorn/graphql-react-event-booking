@@ -14,8 +14,8 @@ const professionalItem = (props) => (
           {props.name} {props.lastname}
         </h1>
         <div className="card-body">
-          <h2>${props.price}</h2>
-          <h2>{props.professionalId}</h2>
+          <h2>Therapist</h2>
+          <h2>License number <span className='font-bold'>202390</span> </h2>
         </div>
 
         <div className="justify-end card-actions">

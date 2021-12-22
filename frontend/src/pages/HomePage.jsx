@@ -52,6 +52,7 @@ class BookingsPage extends Component {
       .then((resData) => {
         const appointments = resData.data.appointments;
         this.setState({ appointments: appointments });
+        console.log(this.state.appointments)
       })
       .catch((err) => {
         console.log(err);
@@ -75,7 +76,7 @@ class BookingsPage extends Component {
           <figure>
             <img
               alt="profile"
-              src="https://picsum.photos/id/1005/400/250"
+              src={this.context.imageUrl}
             ></img>
           </figure>
           <div class="card-body">

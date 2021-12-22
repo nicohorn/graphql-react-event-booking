@@ -24,6 +24,10 @@ static contextType = AuthContext;
                   }
                   user{
                       email
+                      profile{
+                        name
+                        lastname
+                      }
                   }
                 }
               }
